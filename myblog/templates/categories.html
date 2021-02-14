@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Category Search: {{ cats }}</h1>
+
+{% for post in category_posts %}
+
+{{ post.title }} | {{ post.author }} | {{ post.post_date }}<br>
+{{ post.body|safe }}<br><br>
+
+{% endfor %}
+{% endblock %}
