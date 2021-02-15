@@ -41,5 +41,5 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('home')
 
 def CategoryView(request, cats):
-    category_posts= Post.objects.filter(category= cats)
-    return render(request, 'categories.html', {'cats': cats, 'category_posts': category_posts})
+    category_posts= Post.objects.filter(category= cats.replace('-', ' '))
+    return render(request, 'categories.html', {'cats': cats.replace('-', ' '), 'category_posts': category_posts})
