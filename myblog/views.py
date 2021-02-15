@@ -23,6 +23,7 @@ class AddPostView(LoginRequiredMixin, CreateView):
     form_class = PostForm
     template_name = 'add_post.html'
     login_url = '/members/login/'
+    #success_url = reverse_lazy('home')
 
     #fields='__all__'
     #fields= ['title', 'body']
