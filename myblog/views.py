@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from . models import Post
 from .forms import PostForm, EditForm
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
 #def home(request):
@@ -28,18 +28,26 @@ class AddPostView(LoginRequiredMixin, CreateView):
     #fields='__all__'
     #fields= ['title', 'body']
 
-class UpdatePostView(LoginRequiredMixin, UpdateView):
+class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = EditForm
     template_name = 'editpost.html'
     login_url = '/members/login/'
     #fields = ['title', 'body']
 
-class DeletePostView(LoginRequiredMixin, DeleteView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'deletepost.html'
     login_url = '/members/login/'
     success_url = reverse_lazy('home')
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
 
 def CategoryView(request, cats):
     category_posts= Post.objects.filter(category= cats.replace('-', ' '))
