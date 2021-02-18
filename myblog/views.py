@@ -23,17 +23,19 @@ class AddPostView(LoginRequiredMixin, CreateView):
     form_class = PostForm
     template_name = 'add_post.html'
     login_url = '/members/login/'
-    #success_url = reverse_lazy('home')
 
-    #fields='__all__'
-    #fields= ['title', 'body']
+    def post(self, request, **kwargs):
+        request.POST = request.POST.copy()
+        request.POST['author']= request.user.id
+        return super(AddPostView, self).post(request, kwargs)
+
 
 class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = EditForm
     template_name = 'editpost.html'
     login_url = '/members/login/'
-    #fields = ['title', 'body']
+
 
     def test_func(self):
         obj = self.get_object()
